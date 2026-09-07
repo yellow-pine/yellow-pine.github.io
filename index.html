@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Yellow Pine | A small product studio</title>
+<meta name="description" content="Yellow Pine is a small product studio: a tiny team working alongside AI agents, building focused software. Latch, kishi, bly, and the developer tools we needed ourselves and released.">
+<link rel="canonical" href="https://yellowpine.dev/">
+<link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA4MzQgODM0IiByb2xlPSJpbWciIGFyaWEtbGFiZWw9IlllbGxvdyBQaW5lIGljb24iPgogIDx0aXRsZT5ZZWxsb3cgUGluZSBpY29uPC90aXRsZT4KICA8cmVjdCB3aWR0aD0iODM0IiBoZWlnaHQ9IjgzNCIgcng9IjE4NiIgZmlsbD0iIzIwMjAyMCIvPgogIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDEwNi4yLDY1LjgpIHNjYWxlKDEuMjY1KSI+PHBhdGggZmlsbD0iI0ZGRDEwMCIgZD0iTTI0OS40LDc4LjlRMjcwLjksNDAuNSAyODYuOCw4MS41TDM0Mi43LDIyNi4xUTM1MC43LDI0Ni42IDMyOC43LDI0NS4xTDE4NS4xLDIzNVExNjMuMSwyMzMuNSAxNzMuOSwyMTQuM1oiLz48cGF0aCBmaWxsPSIjRkZEMTAwIiBkPSJNMjM2LjksMTc1UTI2My45LDE0MC4zIDI4NS44LDE3OC40TDQxMy44LDQwMS4xUTQyNC43LDQyMC4yIDQwMi44LDQxOC42TDI5My4xLDQxMVEyODMuMSw0MTAuMyAyODIuNCw0MjAuMkwyNzkuOCw0NTcuMlEyNzguOCw0NzIuMSAyNjMuOCw0NzEuMUwyMTcuOSw0NjcuOVEyMDMsNDY2LjggMjA0LDQ1MS45TDIwNi42LDQxNC45UTIwNy4zLDQwNSAxOTcuMyw0MDQuM0w4Ny42LDM5Ni42UTY1LjYsMzk1LjEgNzkuMSwzNzcuN1oiLz48L2c+Cjwvc3ZnPgo=">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="yellowpine.dev">
+<meta property="og:url" content="https://yellowpine.dev/">
+<meta property="og:title" content="Yellow Pine, a small product studio">
+<meta property="og:description" content="A tiny team working alongside AI agents, building focused software. Two hosted products, plus the developer tools we needed ourselves and released.">
+<meta name="twitter:card" content="summary">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  /* Yellow Pine identity v2.2 - tokens from yellow-pine/.github brand/README.md.
+     #FFD100 is identity only (the mark, and the sanctioned selection wash).
+     Blue is interactive only. Focus rings are azure in both modes, never yellow. */
+  :root {
+    --paper: #FCFCFC;
+    --card: #FFFFFF;
+    --sunken: #F4F4F2;
+    --hairline: #E7E7E5;
+    --ink: #202020;
+    --ink-2: #5A5A58;
+    --ink-3: #6E6E6C;
+    --link: #1a75c8;
+    --link-hover: #155F9F;
+    --focus: #1a75c8;
+    --brand: #FFD100;
+    --wash: #FFF7CC;
+    --wash-ink: #202020;
+    --display: "Rubik", system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+    --body: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper: #161616;
+      --card: #202020;
+      --sunken: #202020;
+      --hairline: #3A3A3A;
+      --ink: #F2F2F0;
+      --ink-2: #B7B7B4;
+      --ink-3: #8F8F8C;
+      --link: #82BCF2;
+      --link-hover: #9FCCF6;
+      --focus: #82BCF2;
+    }
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font: 17px/1.65 var(--body);
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection { background: var(--wash); color: var(--wash-ink); }
+  a { color: var(--link); text-decoration: none; }
+  a:hover { color: var(--link-hover); text-decoration: underline; text-underline-offset: 0.2em; }
+  a:focus-visible, .btn:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  main {
+    max-width: 52rem;
+    margin: 0 auto;
+    padding: clamp(3rem, 8vw, 6rem) 1.25rem 3rem;
+  }
+
+  /* Hero */
+  .hero > * { max-width: 40rem; }
+  h1 {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(2.5rem, 6vw, 3.5rem);
+    line-height: 1.02;
+    letter-spacing: 0.02em;
+    margin: 0 0 0.6rem;
+    display: flex;
+    align-items: center;
+    gap: 0.28em;
+    flex-wrap: wrap;
+  }
+  /* The lockup keeps the mark BETWEEN the words - that placement is the signature. */
+  .mark {
+    height: 0.92em;
+    width: auto;
+    flex: none;
+    transform: translateY(-0.04em);
+  }
+  .role {
+    color: var(--ink-2);
+    font-size: 1.0625rem;
+    margin: 0 0 2.25rem;
+  }
+  .thesis {
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: clamp(1.35rem, 2.6vw, 1.7rem);
+    line-height: 1.28;
+    margin: 0 0 1.1rem;
+  }
+  .lede {
+    color: var(--ink-2);
+    font-size: 1.125rem;
+    margin: 0 0 1.9rem;
+  }
+  .actions { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.7rem 1.15rem;
+    border: 1px solid var(--hairline);
+    border-radius: 8px;
+    color: var(--ink);
+    font-weight: 500;
+    font-size: 0.95rem;
+    line-height: 1.2;
+    background: var(--card);
+    transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  }
+  .btn:hover { text-decoration: none; border-color: var(--ink-3); color: var(--ink); }
+  .btn.primary {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--paper);
+  }
+  .btn.primary:hover { background: var(--ink-2); border-color: var(--ink-2); color: var(--paper); }
+
+  .hero > * { animation: rise 0.55s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+  .hero > :nth-child(2) { animation-delay: 0.05s; }
+  .hero > :nth-child(3) { animation-delay: 0.1s; }
+  .hero > :nth-child(4) { animation-delay: 0.15s; }
+  .hero > :nth-child(5) { animation-delay: 0.2s; }
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hero > * { animation: none; }
+    .btn { transition: none; }
+  }
+
+  /* Proof strip */
+  .proof {
+    list-style: none;
+    margin: 3.5rem 0 0;
+    padding: 1.5rem 0 0;
+    border-top: 1px solid var(--hairline);
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem 1.5rem;
+  }
+  .proof li { display: grid; gap: 0.2rem; align-content: start; }
+  .proof strong {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 1.5rem;
+    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+  }
+  .proof span { color: var(--ink-2); font-size: 0.875rem; line-height: 1.4; }
+
+  /* Sections */
+  section { margin-top: 4.5rem; }
+  h2 {
+    font-family: var(--body);
+    font-weight: 600;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+    margin: 0 0 0.25rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--hairline);
+  }
+  .measure { max-width: 40rem; }
+
+  /* Products */
+  .products { list-style: none; margin: 0; padding: 0; }
+  .products li {
+    display: grid;
+    grid-template-columns: 11rem 1fr;
+    gap: 0.25rem 1.5rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--hairline);
+  }
+  .products li:last-child { border-bottom: 0; }
+  .products .name {
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: 1.0625rem;
+  }
+  .products .what { color: var(--ink-2); }
+  .products .what a { font-weight: 500; }
+
+  /* How we work */
+  .how p { margin: 1.25rem 0 0; }
+
+  /* Contact */
+  .contact .big {
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: clamp(1.25rem, 2.4vw, 1.5rem);
+    line-height: 1.3;
+    margin: 1.25rem 0;
+  }
+  .links { display: flex; flex-wrap: wrap; gap: 0.5rem 1.75rem; }
+  .links a { font-weight: 500; }
+
+  footer {
+    margin-top: 4rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--hairline);
+    color: var(--ink-2);
+    font-size: 0.875rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.5rem 1.5rem;
+  }
+
+  @media (max-width: 640px) {
+    .proof { grid-template-columns: repeat(2, 1fr); }
+    .products li { grid-template-columns: 1fr; gap: 0.15rem; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <header class="hero">
+    <h1>
+      <span>Yellow</span><svg class="mark" viewBox="73.4 59.7 344.6 412.1" aria-hidden="true" focusable="false"><path fill="#FFD100" d="M249.4,78.9Q270.9,40.5 286.8,81.5L342.7,226.1Q350.7,246.6 328.7,245.1L185.1,235Q163.1,233.5 173.9,214.3Z"/><path fill="#FFD100" d="M236.9,175Q263.9,140.3 285.8,178.4L413.8,401.1Q424.7,420.2 402.8,418.6L293.1,411Q283.1,410.3 282.4,420.2L279.8,457.2Q278.8,472.1 263.8,471.1L217.9,467.9Q203,466.8 204,451.9L206.6,414.9Q207.3,405 197.3,404.3L87.6,396.6Q65.6,395.1 79.1,377.7Z"/></svg><span>Pine</span>
+    </h1>
+    <p class="role">A small product studio</p>
+    <p class="thesis">A tiny team working alongside AI agents, building focused software.</p>
+    <p class="lede">Two hosted products so far, plus the developer tools we needed ourselves
+    and released. We run our own model serving, and our agents open pull requests against
+    our own repositories.</p>
+    <div class="actions">
+      <a class="btn primary" href="mailto:hello@yellowpine.com">Email us</a>
+      <a class="btn" href="https://github.com/yellow-pine">GitHub</a>
+    </div>
+  </header>
+
+  <ul class="proof" aria-label="At a glance">
+    <li><strong>Since 2021</strong><span>building software as Yellow Pine</span></li>
+    <li><strong>4 products</strong><span>two hosted on the web, two open source</span></li>
+    <li><strong>Open source</strong><span>bly and zsh-github-dark, free to use</span></li>
+    <li><strong>Self-hosted</strong><span>our own model serving and agentic CI</span></li>
+  </ul>
+
+  <section aria-labelledby="build">
+    <h2 id="build">What we build</h2>
+    <ul class="products">
+      <li>
+        <span class="name"><a href="https://latch.fyi">Latch</a></span>
+        <span class="what">Scores a public GitHub repository two ways, for AI coding agents
+        and for human newcomers. Six category scores, a one-line verdict on each, and a
+        prioritized list of fixes with the score impact of each one.</span>
+      </li>
+      <li>
+        <span class="name"><a href="https://kishi.fyi">kishi</a></span>
+        <span class="what">Turns a short onboarding into a personalized, sixteen-section
+        dating-readiness kit, on the web and as a printable PDF. English, German and
+        Turkish.</span>
+      </li>
+      <li>
+        <span class="name"><a href="https://github.com/yellow-pine/bly">bly</a></span>
+        <span class="what">A career agent that runs a job search out of your own inbox, on
+        your own machine. Free, open source, local-first.</span>
+      </li>
+      <li>
+        <span class="name"><a href="https://github.com/yellow-pine/zsh-github-dark">zsh-github-dark</a></span>
+        <span class="what">A minimalist zsh and macOS Terminal setup with GitHub Dark
+        colors, a git-aware prompt, and a one-line installer.</span>
+      </li>
+    </ul>
+  </section>
+
+  <section class="how" aria-labelledby="how">
+    <h2 id="how">How we work</h2>
+    <p class="measure">A small human team and a fleet of AI agents. We serve language models
+    on our own hardware, gate every pull request on a code review from a locally served
+    model before it can merge, and build the tooling we need as we go. The pieces that turn
+    out to be useful to other people get released.</p>
+  </section>
+
+  <section class="contact" aria-labelledby="contact">
+    <h2 id="contact">Get in touch</h2>
+    <p class="big measure">Write to us at
+      <a href="mailto:hello@yellowpine.com">hello@yellowpine.com</a>, or open an issue in the
+      relevant repository.</p>
+    <nav class="links" aria-label="Elsewhere">
+      <a href="https://github.com/yellow-pine">GitHub</a>
+      <a href="https://latch.fyi">Latch</a>
+      <a href="https://kishi.fyi">kishi</a>
+    </nav>
+  </section>
+
+  <footer>
+    <span>Yellow Pine</span>
+    <span>A small product studio</span>
+  </footer>
+</main>
+</body>
+</html>

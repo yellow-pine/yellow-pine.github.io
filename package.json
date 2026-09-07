@@ -1,0 +1,9 @@
+{
+  "name": "@yellow-pine/website",
+  "private": true,
+  "description": "The Yellow Pine website (yellowpine.dev) - one hand-written page, served by GitHub Pages.",
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/site.test.mjs"
+  }
+}

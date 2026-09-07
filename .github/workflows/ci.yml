@@ -1,0 +1,19 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  schedule:
+    # Weekly, so a product going dark or a repo flipping private is caught even
+    # when nothing has been pushed.
+    - cron: '17 6 * * 1'
+
+jobs:
+  invariants:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm test
