@@ -107,10 +107,10 @@ test('no build artifacts: the site is one file plus a CNAME', () => {
 
 // --- assets are inline -------------------------------------------------------------
 
-test('mark and favicon are inline, not fetched', () => {
+test('lockup and favicon are inline, not fetched', () => {
   assert.ok(
-    html.includes('<svg class="mark"'),
-    'the pine mark must be inline SVG, not an external file',
+    html.includes('<svg class="lockup"'),
+    'the wordmark lockup must be inline SVG, not an external file',
   );
   assert.ok(
     html.includes('rel="icon" href="data:image/svg+xml;base64,'),
@@ -141,19 +141,36 @@ test('identity yellow is used only by the mark and the selection wash', () => {
   const occurrences = [...code.matchAll(new RegExp(BRAND_YELLOW, 'gi'))];
   assert.ok(occurrences.length > 0, 'the mark should carry the identity yellow');
 
-  // Every occurrence must be either a fill inside the inline mark, or the --brand token
-  // declaration. It must never land in a color/background/border for text or UI.
+  // Every occurrence must be a fill inside the inline mark, the --brand token
+  // declaration, or the terminal prompt on the dark chassis (see the test below).
+  // It must never land in a color/background/border for text or UI on paper.
   for (const m of occurrences) {
     const line = code.slice(code.lastIndexOf('\n', m.index) + 1, code.indexOf('\n', m.index));
-    const legal = /fill="#FFD100"/i.test(line) || /--brand:\s*#FFD100/i.test(line);
+    const legal =
+      /fill="#FFD100"/i.test(line) ||
+      /--brand:\s*#FFD100/i.test(line) ||
+      /^\.chassis\b/.test(line.trim());
     assert.ok(legal, `identity yellow used outside the mark: ${line.trim()}`);
   }
 });
 
-test('identity yellow never sets a text, background, or border color', () => {
-  for (const prop of ['color', 'background', 'background-color', 'border-color', 'outline']) {
+test('identity yellow never sets a background, border, or focus ring', () => {
+  for (const prop of ['background', 'background-color', 'border-color', 'outline']) {
     const re = new RegExp(`${prop}\\s*:\\s*[^;}]*${BRAND_YELLOW}`, 'i');
     assert.ok(!re.test(code), `identity yellow used as ${prop}`);
+  }
+});
+
+test('identity yellow as a foreground appears only on the dark chassis', () => {
+  // The brand forbids Cyber Yellow as text on light. The Applications board does use it
+  // as the terminal prompt on the #202020 chassis, where it clears contrast comfortably.
+  for (const m of code.matchAll(new RegExp(`color\\s*:\\s*${BRAND_YELLOW}`, 'gi'))) {
+    const before = code.slice(0, m.index);
+    const selector = before.slice(before.lastIndexOf('}') + 1).trim();
+    assert.ok(
+      selector.startsWith('.chassis'),
+      `yellow used as a foreground outside the dark chassis: ${selector}`,
+    );
   }
 });
 
@@ -173,6 +190,20 @@ test('focus rings are azure in both modes, never yellow', () => {
 test('link tokens match the brand spec', () => {
   assert.match(html, /--link:\s*#1a75c8/i, 'light link must be the AA-darkened blue');
   assert.match(html, /--link:\s*#82BCF2/i, 'dark link must be the dark-mode blue');
+});
+
+test('the wordmark follows the theme rather than hard-coding ink', () => {
+  assert.match(code, /\.lockup\s+\.word\s*\{[^}]*fill:\s*currentColor/i,
+    'wordmark must use currentColor so it inverts in dark mode');
+  assert.ok(!/class="word"[^>]*fill="#202020"/.test(html), 'wordmark fill must not be hard-coded');
+});
+
+test('type ramp matches the design system boards', () => {
+  assert.match(code, /--font:\s*"Rubik"/, 'Rubik must be the page face, body included');
+  assert.match(code, /font-weight:\s*500/, 'body copy is Rubik 500 per the boards');
+  assert.match(code, /h2\s*\{[^}]*font-weight:\s*800/, 'section heads are 800');
+  assert.match(code, /h2\s*\{[^}]*letter-spacing:\s*0\.14em/, 'section heads track 0.14em');
+  assert.match(code, /\.eyebrow\s*\{[^}]*letter-spacing:\s*0\.22em/, 'eyebrows track 0.22em');
 });
 
 test('pine green never appears: it belongs to cansin.dev, not this brand', () => {
