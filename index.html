@@ -218,7 +218,18 @@
     transition: color 0.15s ease;
   }
   .row:hover .name { color: var(--link); }
-  .where { font-size: 0.8125rem; font-weight: 500; color: var(--muted); }
+  /* The right of each row answers "where does this live". A product has a domain; an
+     open-source tool may have one, a domain and a licence, or only the licence. The
+     domain is the destination the row goes to, so it carries more ink than the kind. */
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: flex-end;
+    gap: 0.1rem 1.25rem;
+  }
+  .where { font-size: 0.8125rem; font-weight: 500; color: var(--ink-2); }
+  .kind { font-size: 0.8125rem; font-weight: 500; color: var(--muted); }
   .what {
     display: block;
     margin-top: 0.4rem;
@@ -299,7 +310,7 @@
           <a class="row" href="https://latch.fyi">
             <span class="head">
               <span class="name">Latch</span>
-              <span class="where">latch.fyi</span>
+              <span class="meta"><span class="where">latch.fyi</span></span>
             </span>
             <span class="what">Scores any public GitHub repository twice: once the way an AI
             coding agent reads it, once the way a human newcomer does. Then it lists the
@@ -310,17 +321,20 @@
           <a class="row" href="https://kishi.fyi">
             <span class="head">
               <span class="name">kishi</span>
-              <span class="where">kishi.fyi</span>
+              <span class="meta"><span class="where">kishi.fyi</span></span>
             </span>
             <span class="what">Turns a short onboarding into a personal dating-readiness kit
             of sixteen sections, on the web and as a PDF you can print.</span>
           </a>
         </li>
         <li>
-          <a class="row" href="https://github.com/yellow-pine/bly">
+          <a class="row" href="https://bly.fyi">
             <span class="head">
               <span class="name">bly</span>
-              <span class="where">Open source</span>
+              <span class="meta">
+                <span class="kind">Open source</span>
+                <span class="where">bly.fyi</span>
+              </span>
             </span>
             <span class="what">Runs a job search out of your own inbox, on your own machine.
             Local-first, and free.</span>
@@ -330,7 +344,7 @@
           <a class="row" href="https://github.com/yellow-pine/zsh-github-dark">
             <span class="head">
               <span class="name">zsh-github-dark</span>
-              <span class="where">Open source</span>
+              <span class="meta"><span class="kind">Open source</span></span>
             </span>
             <span class="what">A zsh and macOS Terminal setup that matches GitHub Dark, with
             a git-aware prompt and a one-line installer.</span>
