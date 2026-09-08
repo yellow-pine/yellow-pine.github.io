@@ -9,7 +9,7 @@
 //      public and fails here, so nothing private can leak onto the site.
 //   3. Every product link is live (a dead product link is worse than no link).
 //   4. The page has no external asset dependencies beyond Google Fonts — the mark and
-//      favicon must stay inline.
+//      favicon must stay inline, and the wordmark is live type rather than outlines.
 //   5. Brand v2.2 guardrails hold: the identity yellow appears only inside the inline mark
 //      and the selection wash, and focus rings are azure, never yellow.
 //
@@ -107,11 +107,29 @@ test('no build artifacts: the site is one file plus a CNAME', () => {
 
 // --- assets are inline -------------------------------------------------------------
 
-test('lockup and favicon are inline, not fetched', () => {
-  assert.ok(
-    html.includes('<svg class="lockup"'),
-    'the wordmark lockup must be inline SVG, not an external file',
+test('the lockup is live type with the mark set between the words', () => {
+  const lockup = html.match(/<h1 class="lockup">([\s\S]*?)<\/h1>/)?.[1];
+  assert.ok(lockup, 'no lockup found');
+
+  // The words are real text, not outlined paths: selectable, searchable, sized by the
+  // type ramp, and coloured by whatever surface they sit on.
+  const words = lockup.replace(/<svg[\s\S]*?<\/svg>/g, '\u0000');
+  assert.match(
+    words,
+    /^\s*Yellow\s*\u0000\s*Pine\s*$/,
+    'the lockup must read Yellow + mark + Pine, with both words as live text',
   );
+
+  // The mark between them is the inline master, carrying the identity yellow, and hidden
+  // from assistive tech so the heading announces exactly "Yellow Pine".
+  const mark = lockup.match(/<svg class="mark"[\s\S]*?<\/svg>/)?.[0];
+  assert.ok(mark, 'the mark must be inline SVG, not an external file');
+  assert.ok(mark.includes('aria-hidden="true"'), 'the mark must not be announced twice');
+  assert.match(mark, /fill="#FFD100"/, 'the mark carries the identity yellow');
+  assert.ok(!/<image|xlink:href/.test(mark), 'the mark must not reference an external asset');
+});
+
+test('favicon is inline, not fetched', () => {
   assert.ok(
     html.includes('rel="icon" href="data:image/svg+xml;base64,'),
     'the favicon must be an inline data URI',
@@ -192,10 +210,22 @@ test('link tokens match the brand spec', () => {
   assert.match(html, /--link:\s*#82BCF2/i, 'dark link must be the dark-mode blue');
 });
 
-test('the wordmark follows the theme rather than hard-coding ink', () => {
-  assert.match(code, /\.lockup\s+\.word\s*\{[^}]*fill:\s*currentColor/i,
-    'wordmark must use currentColor so it inverts in dark mode');
-  assert.ok(!/class="word"[^>]*fill="#202020"/.test(html), 'wordmark fill must not be hard-coded');
+test('the wordmark inherits its colour rather than hard-coding ink', () => {
+  // It is type now, so it inherits: the masthead sets the colour once from the token and
+  // the words follow. Nothing in the lockup may pin a hex.
+  const lockupRule = code.match(/\.lockup\s*\{[^}]*\}/)?.[0] ?? '';
+  assert.ok(lockupRule, 'no .lockup rule');
+  assert.ok(!/#[0-9a-f]{3,8}\b/i.test(lockupRule), 'the wordmark must not hard-code a colour');
+  assert.match(code, /\.masthead\s*\{[^}]*color:\s*var\(--chassis-ink\)/,
+    'the masthead colours the lockup from the token');
+});
+
+test('the chassis is the same dark in both themes', () => {
+  // The identity slab does not flip with the reader's preference; only the paper does.
+  // That is what keeps the mark a fill on dark, which is all the brand licenses it for.
+  assert.match(code, /--chassis:\s*#202020/i, 'the chassis is #202020');
+  const redefinitions = [...code.matchAll(/--chassis:\s*#/g)].length;
+  assert.equal(redefinitions, 1, 'the chassis must not be redefined per theme');
 });
 
 test('type ramp matches the design system boards', () => {
@@ -203,7 +233,8 @@ test('type ramp matches the design system boards', () => {
   assert.match(code, /font-weight:\s*500/, 'body copy is Rubik 500 per the boards');
   assert.match(code, /h2\s*\{[^}]*font-weight:\s*800/, 'section heads are 800');
   assert.match(code, /h2\s*\{[^}]*letter-spacing:\s*0\.14em/, 'section heads track 0.14em');
-  assert.match(code, /\.eyebrow\s*\{[^}]*letter-spacing:\s*0\.22em/, 'eyebrows track 0.22em');
+  assert.match(code, /\.lockup\s*\{[^}]*font-weight:\s*800/,
+    'the wordmark is Rubik 800, the weight the outlined master was drawn from');
 });
 
 test('pine green never appears: it belongs to cansin.dev, not this brand', () => {

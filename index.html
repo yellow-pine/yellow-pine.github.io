@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light dark">
 <title>Yellow Pine | Thoughtful tools, built with care</title>
-<meta name="description" content="Yellow Pine is a small product studio: a tiny human team and a fleet of AI agents, building thoughtful tools. Latch, kishi, bly, and the developer tools we needed ourselves and released.">
+<meta name="description" content="Yellow Pine is a small product studio: a tiny human team and a fleet of AI agents. Latch, kishi, bly, and the developer tools we needed ourselves and released.">
 <link rel="canonical" href="https://yellowpine.dev/">
 <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA4MzQgODM0IiByb2xlPSJpbWciIGFyaWEtbGFiZWw9IlllbGxvdyBQaW5lIGljb24iPgogIDx0aXRsZT5ZZWxsb3cgUGluZSBpY29uPC90aXRsZT4KICA8cmVjdCB3aWR0aD0iODM0IiBoZWlnaHQ9IjgzNCIgcng9IjE4NiIgZmlsbD0iIzIwMjAyMCIvPgogIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDEwNi4yLDY1LjgpIHNjYWxlKDEuMjY1KSI+PHBhdGggZmlsbD0iI0ZGRDEwMCIgZD0iTTI0OS40LDc4LjlRMjcwLjksNDAuNSAyODYuOCw4MS41TDM0Mi43LDIyNi4xUTM1MC43LDI0Ni42IDMyOC43LDI0NS4xTDE4NS4xLDIzNVExNjMuMSwyMzMuNSAxNzMuOSwyMTQuM1oiLz48cGF0aCBmaWxsPSIjRkZEMTAwIiBkPSJNMjM2LjksMTc1UTI2My45LDE0MC4zIDI4NS44LDE3OC40TDQxMy44LDQwMS4xUTQyNC43LDQyMC4yIDQwMi44LDQxOC42TDI5My4xLDQxMVEyODMuMSw0MTAuMyAyODIuNCw0MjAuMkwyNzkuOCw0NTcuMlEyNzguOCw0NzIuMSAyNjMuOCw0NzEuMUwyMTcuOSw0NjcuOVEyMDMsNDY2LjggMjA0LDQ1MS45TDIwNi42LDQxNC45UTIwNy4zLDQwNSAxOTcuMyw0MDQuM0w4Ny42LDM5Ni42UTY1LjYsMzk1LjEgNzkuMSwzNzcuN1oiLz48L2c+Cjwvc3ZnPgo=">
 <meta property="og:type" content="website">
@@ -18,13 +18,16 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@500;600;700;800&display=swap" rel="stylesheet">
 <style>
-  /* Yellow Pine identity v2.2. Tokens and type ramp taken from the design system in
+  /* Yellow Pine identity v2.2. Tokens and type ramp from the design system in
      yellow-pine/.github brand/design/ - Rubik throughout, body at 500, section heads at
-     800/0.14em, eyebrows at 600/0.22em.
-     Identity yellow is surface/fill only. Blue is interactive only. */
+     15px/800/0.14em.
+
+     The page is built on the one surface the brand licenses for the identity yellow: the
+     #202020 chassis. It runs full-bleed as the masthead and holds the lockup, so the mark
+     is a fill on dark - never text on light. Everything below is paper and hairlines.
+     Blue is interactive only. */
   :root {
     --paper: #FCFCFC;
-    --card: #FFFFFF;
     --sunken: #F4F4F2;
     --hairline: #E7E7E5;
     --ink: #202020;
@@ -35,25 +38,31 @@
     --focus: #1a75c8;
     --brand: #FFD100;
     --wash: #FFF7CC;
+
+    /* The chassis is constant in both themes: a dark slab on light paper, a raised slab
+       on dark paper. The identity does not flip with the reader's preference. */
     --chassis: #202020;
     --chassis-ink: #FCFCFC;
     --chassis-muted: #9a9a98;
+    --chassis-rule: #303030;
+    --chassis-link: #82BCF2;
+
     --font: "Rubik", "Trebuchet MS", system-ui, -apple-system, "Segoe UI", sans-serif;
     --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    --gutter: clamp(1.25rem, 5vw, 2.5rem);
+    --measure: 64rem;
   }
   @media (prefers-color-scheme: dark) {
     :root {
       --paper: #161616;
-      --card: #202020;
-      --sunken: #202020;
-      --hairline: #3A3A3A;
+      --sunken: #1F1F1F;
+      --hairline: #333331;
       --ink: #F2F2F0;
       --ink-2: #B7B7B4;
       --muted: #8F8F8C;
       --link: #82BCF2;
       --link-hover: #9FCCF6;
       --focus: #82BCF2;
-      --chassis: #202020;
     }
   }
 
@@ -72,223 +81,291 @@
   ::selection { background: var(--wash); color: #202020; }
   a { color: var(--link); text-decoration: none; }
   a:hover { color: var(--link-hover); text-decoration: underline; text-underline-offset: 0.2em; }
-  a:focus-visible, .btn:focus-visible {
-    outline: 2px solid var(--focus);
-    outline-offset: 3px;
-    border-radius: 6px;
+  :focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; border-radius: 6px; }
+  p { margin: 0; text-wrap: pretty; }
+
+  .inner { max-width: var(--measure); margin: 0 auto; padding-inline: var(--gutter); }
+
+  /* ---- Masthead: the chassis, full bleed ---------------------------------------- */
+
+  .masthead {
+    background: var(--chassis);
+    color: var(--chassis-ink);
+    padding-block: clamp(3rem, 8vw, 5rem) clamp(2rem, 4vw, 2.75rem);
   }
-  p { text-wrap: pretty; }
+  .masthead a { color: var(--chassis-link); }
+  .masthead a:hover { color: var(--chassis-link); }
+  .masthead :focus-visible { outline-color: var(--chassis-link); }
+
+  /* The lockup is live type - Rubik 800, the page's own face - with the mark set between
+     the two words as an inline SVG. The tree runs past the cap height the way a tree does. */
+  .lockup {
+    margin: 0;
+    font-size: clamp(2.25rem, 9vw, 5.5rem);
+    font-weight: 800;
+    letter-spacing: -0.035em;
+    line-height: 1;
+  }
+  .lockup .mark {
+    height: 1.14em;
+    width: 0.953em;
+    /* Optically kerned: "w" ends on a diagonal, "P" opens on a stem. */
+    margin-inline: 0.14em 0.07em;
+    vertical-align: baseline;
+  }
+
+  .tagline {
+    margin-top: clamp(1.5rem, 4vw, 2.25rem);
+    font-size: clamp(1.15rem, 2.8vw, 1.5rem);
+    font-weight: 500;
+    line-height: 1.35;
+    letter-spacing: -0.01em;
+    max-width: 30ch;
+    text-wrap: balance;
+  }
+  .sub {
+    margin-top: 0.6rem;
+    color: var(--chassis-muted);
+    max-width: 54ch;
+    text-wrap: balance;
+  }
+
+  /* The masthead closes on the one line that says what this place actually is, paired
+     with the two ways to reach it. */
+  .status {
+    margin-top: clamp(2.25rem, 6vw, 3.5rem);
+    padding-top: 1.125rem;
+    border-top: 1px solid var(--chassis-rule);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 0.75rem 2rem;
+  }
+  .chassis {
+    font-family: var(--mono);
+    font-size: 0.8125rem;
+    line-height: 1.7;
+    color: var(--chassis-muted);
+  }
+  .chassis .prompt { color: #FFD100; }
+  .chassis .path { color: #3C91E6; }
+  .chassis .cmd { color: var(--chassis-ink); }
+  .reach {
+    display: flex;
+    gap: 1.5rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+
+  /* ---- Paper -------------------------------------------------------------------- */
 
   main {
-    max-width: 54rem;
-    margin: 0 auto;
-    padding: clamp(2.5rem, 7vw, 3.5rem) 1.5rem 3rem;
     display: flex;
     flex-direction: column;
-    gap: clamp(2.75rem, 6vw, 3.5rem);
+    gap: clamp(2.75rem, 6vw, 4rem);
+    padding-block: clamp(3rem, 7vw, 4.5rem) clamp(2.5rem, 5vw, 3.5rem);
   }
 
-  /* Eyebrow - 11px / 600 / 0.22em, per the boards */
-  .eyebrow {
-    font-size: 0.6875rem;
-    font-weight: 600;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin: 0;
+  /* Every section below the masthead hangs off one spine: the label sits in a rail on
+     the left, the content runs in the column to its right. The labels are a rail, not an
+     eyebrow over each block, and the page keeps a single left edge for its content. */
+  .band {
+    display: grid;
+    grid-template-columns: minmax(0, 11rem) minmax(0, 1fr);
+    gap: 0 clamp(1.5rem, 4vw, 3rem);
+    align-items: start;
   }
-
-  /* Section heads - 15px / 800 / 0.14em, per the boards */
   h2 {
+    margin: 0;
+    padding-top: 0.4rem;
     font-size: 0.9375rem;
     font-weight: 800;
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    margin: 0 0 1.25rem;
-    color: var(--ink);
+    color: var(--muted);
   }
 
-  /* Hero */
-  .hero { display: flex; flex-direction: column; gap: 1.5rem; }
-  .lockup { display: block; width: min(23rem, 74vw); height: auto; color: var(--ink); }
-  .lockup .word { fill: currentColor; }
-  h1 {
-    font-size: clamp(1.9rem, 5.2vw, 2.75rem);
-    font-weight: 800;
-    line-height: 1.1;
-    letter-spacing: -0.005em;
-    text-wrap: balance;
+  /* Work reads as a contents page: what it is on the left, where it lives on the right,
+     what it does underneath. Rules, not cards - the four are a list, not four objects. */
+  .work {
+    list-style: none;
     margin: 0;
-    max-width: 20ch;
+    padding: 0;
+    border-top: 1px solid var(--hairline);
   }
-  .lede {
-    font-size: 1.0625rem;
+  .row {
+    display: block;
+    padding-block: clamp(1.125rem, 2.5vw, 1.375rem);
+    border-bottom: 1px solid var(--hairline);
+    color: inherit;
+    transition: background-color 0.15s ease;
+  }
+  .row:hover { background: var(--sunken); text-decoration: none; color: inherit; }
+  .row:focus-visible { outline-offset: -2px; border-radius: 8px; }
+  .head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.15rem 1.5rem;
+  }
+  .name {
+    font-size: clamp(1.3rem, 2.8vw, 1.65rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    transition: color 0.15s ease;
+  }
+  .row:hover .name { color: var(--link); }
+  .where { font-size: 0.8125rem; font-weight: 500; color: var(--muted); }
+  .what {
+    display: block;
+    margin-top: 0.4rem;
     color: var(--ink-2);
-    margin: 0;
-    max-width: 62ch;
+    max-width: 56ch;
   }
-  .actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 0.25rem; }
-  .btn {
-    display: inline-flex;
-    align-items: center;
-    padding: 0.7rem 1.15rem;
-    border: 1px solid var(--hairline);
-    border-radius: 6px;
-    color: var(--ink);
-    background: var(--card);
-    font-family: var(--font);
-    font-weight: 600;
-    font-size: 0.9375rem;
-    line-height: 1.2;
-    transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
-  }
-  .btn:hover { text-decoration: none; border-color: var(--muted); color: var(--ink); }
-  .btn.primary { background: var(--ink); border-color: var(--ink); color: var(--paper); }
-  .btn.primary:hover { background: var(--ink-2); border-color: var(--ink-2); color: var(--paper); }
-  @media (prefers-reduced-motion: reduce) { .btn { transition: none; } }
 
-  /* Products - cards at the 14px radius the boards use for content blocks */
-  .products { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.75rem; }
-  .products li {
-    background: var(--card);
-    border: 1px solid var(--hairline);
-    border-radius: 14px;
-    padding: 1.25rem 1.375rem;
-    display: grid;
-    gap: 0.35rem;
-  }
-  .products .top { display: flex; align-items: baseline; gap: 0.6rem; flex-wrap: wrap; }
-  .products .name { font-weight: 700; font-size: 1.0625rem; }
-  .products .tag { color: var(--muted); font-size: 0.9375rem; }
-  .products .what { color: var(--ink-2); font-size: 0.9375rem; margin: 0; }
+  .prose { color: var(--ink-2); font-size: 1.0625rem; max-width: 56ch; }
+  .prose + .prose { margin-top: 1rem; }
 
-  /* Terminal chassis - the boards' in-situ treatment. The only place the accents
-     appear as fills, which is exactly what they are licensed for. */
-  .chassis {
-    background: var(--chassis);
-    border-radius: 14px;
-    padding: 1.5rem 1.625rem;
-    font-family: var(--mono);
-    font-size: 0.8125rem;
-    line-height: 1.9;
-    color: var(--chassis-ink);
-    overflow-x: auto;
-  }
-  .chassis .prompt { color: #FFD100; }
-  .chassis .path { color: #3C91E6; }
-  .chassis .note { color: var(--chassis-muted); }
-
-  .prose { color: var(--ink-2); max-width: 62ch; margin: 0 0 1.25rem; }
-
-  /* Contact */
   .big {
-    font-size: clamp(1.2rem, 2.6vw, 1.45rem);
+    font-size: clamp(1.25rem, 3.2vw, 1.6rem);
     font-weight: 600;
     line-height: 1.35;
-    margin: 0 0 1.25rem;
-    max-width: 40ch;
+    letter-spacing: -0.015em;
+    max-width: 30ch;
     text-wrap: balance;
   }
-  .links { display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; font-weight: 600; font-size: 0.9375rem; }
 
-  footer {
-    border-top: 1px solid var(--hairline);
-    padding-top: 1.25rem;
-    color: var(--muted);
-    font-size: 0.8125rem;
+  footer { border-top: 1px solid var(--hairline); }
+  footer .inner {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
     gap: 0.5rem 1.5rem;
+    padding-block: 1.5rem 2.5rem;
+    color: var(--muted);
+    font-size: 0.8125rem;
   }
 
-  @media (max-width: 640px) {
-    body { font-size: 15px; }
-    .chassis { font-size: 0.75rem; padding: 1.25rem; }
+  @media (max-width: 46rem) {
+    .band { grid-template-columns: 1fr; gap: 1rem; }
+    h2 { padding-top: 0; }
+    .what { max-width: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .row, .name { transition: none; }
+  }
+
+  /* Paper output: the brand forbids flooding a page with the dark chassis, so print
+     inverts the masthead to ink on white and keeps the mark. */
+  @media print {
+    .masthead { background: #FFF; color: #000; padding-block: 0 1.5rem; }
+    .masthead a, .sub, .chassis, .chassis .cmd { color: #000; }
+    .chassis .path { color: #000; }
+    .status { border-color: #000; }
+    .work, .row { border-color: #000; }
+    .reach { display: none; }
+    a { text-decoration: underline; }
   }
 </style>
 </head>
 <body>
-<main>
-  <header class="hero">
-    <p class="eyebrow">A small product studio</p>
-    <svg class="lockup" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2198.7 400" role="img" aria-label="Yellow Pine"> <g transform="translate(1019.2,-47.6) scale(0.9318)"><path fill="#FFD100" d="M249.4,78.9Q270.9,40.5 286.8,81.5L342.7,226.1Q350.7,246.6 328.7,245.1L185.1,235Q163.1,233.5 173.9,214.3Z"/><path fill="#FFD100" d="M236.9,175Q263.9,140.3 285.8,178.4L413.8,401.1Q424.7,420.2 402.8,418.6L293.1,411Q283.1,410.3 282.4,420.2L279.8,457.2Q278.8,472.1 263.8,471.1L217.9,467.9Q203,466.8 204,451.9L206.6,414.9Q207.3,405 197.3,404.3L87.6,396.6Q65.6,395.1 79.1,377.7Z"/></g> <path class="word" fill-rule="nonzero" d="M119.6 311L82.8 311Q80 311 77.8 308.9Q75.7 306.8 75.7 303.9L75.7 243.1L10.1 122.1Q9.8 121.2 9.5 120.5Q9.2 119.8 9.2 118.9Q9.2 116.7 11.1 114.8Q12.9 113 15.5 113L50.8 113Q55.1 113 57.5 115.1Q59.9 117.2 60.7 118.9L101.2 191.9L141.9 118.9Q142.8 117.2 145.2 115.1Q147.6 113 151.8 113L187.2 113Q189.7 113 191.4 114.8Q193.1 116.7 193.1 118.9Q193.1 119.8 193 120.5Q192.8 121.2 192.5 122.1L126.9 243.1L126.9 303.9Q126.9 306.8 124.8 308.9Q122.7 311 119.6 311M287.9 313.8Q254.5 313.8 234.7 295.7Q214.9 277.6 214 242Q214 240 214 236.9Q214 233.8 214 232.1Q214.9 209.7 224.1 193.8Q233.3 177.8 249.5 169.4Q265.8 161.1 287.6 161.1Q312.5 161.1 328.7 171Q345 180.9 353.2 197.9Q361.4 214.8 361.4 236.6L361.4 243.4Q361.4 246.5 359.4 248.5Q357.4 250.5 354.3 250.5L263.8 250.5Q263.8 250.8 263.8 251.3Q263.8 251.9 263.8 252.4Q264.1 260.7 266.8 267.4Q269.5 274.2 274.7 278.2Q279.9 282.1 287.6 282.1Q293.2 282.1 297.1 280.3Q300.9 278.5 303.4 276.1Q306 273.7 307.4 272Q309.9 268.9 311.5 268.1Q313 267.4 316.4 267.4L351.5 267.4Q354.3 267.4 356.2 269.1Q358 270.8 357.7 273.7Q357.4 278.5 352.9 285.3Q348.4 292 339.8 298.7Q331.1 305.3 318.1 309.6Q305.1 313.8 287.9 313.8M263.8 221.9L263.8 222.5L311.6 222.5L311.6 221.9Q311.6 212.6 308.9 205.9Q306.2 199.3 300.7 195.6Q295.2 191.9 287.6 191.9Q280.2 191.9 274.8 195.6Q269.5 199.3 266.6 205.9Q263.8 212.6 263.8 221.9M434.1 311L400.7 311Q397.6 311 395.6 308.9Q393.6 306.8 393.6 303.9L393.6 117.2Q393.6 114.1 395.6 112.2Q397.6 110.2 400.7 110.2L434.1 110.2Q437.2 110.2 439.2 112.2Q441.2 114.1 441.2 117.2L441.2 303.9Q441.2 306.8 439.2 308.9Q437.2 311 434.1 311M520.6 311L487.3 311Q484.2 311 482.2 308.9Q480.2 306.8 480.2 303.9L480.2 117.2Q480.2 114.1 482.2 112.2Q484.2 110.2 487.3 110.2L520.6 110.2Q523.8 110.2 525.7 112.2Q527.7 114.1 527.7 117.2L527.7 303.9Q527.7 306.8 525.7 308.9Q523.8 311 520.6 311M636.3 313.8Q612.6 313.8 596.3 306.2Q580 298.6 571.4 284.3Q562.8 270 561.7 250.2Q561.4 244.5 561.4 237.3Q561.4 230.1 561.7 224.7Q562.8 204.6 571.8 190.5Q580.9 176.4 597.2 168.7Q613.4 161.1 636.3 161.1Q659.5 161.1 675.8 168.7Q692.1 176.4 701.1 190.5Q710.2 204.6 711.3 224.7Q711.6 230.1 711.6 237.3Q711.6 244.5 711.3 250.2Q710.2 270 701.5 284.3Q692.9 298.6 676.6 306.2Q660.4 313.8 636.3 313.8M636.3 279.3Q649.1 279.3 654.9 271.7Q660.7 264 661.5 248.8Q661.8 244.5 661.8 237.5Q661.8 230.4 661.5 226.1Q660.7 211.2 654.9 203.4Q649.1 195.6 636.3 195.6Q624.2 195.6 618.1 203.4Q612 211.2 611.4 226.1Q611.2 230.4 611.2 237.5Q611.2 244.5 611.4 248.8Q612 264 618.1 271.7Q624.2 279.3 636.3 279.3M811.7 311L786.3 311Q782 311 780 308.9Q778 306.8 776.9 303.9L736.2 173Q735.6 171.6 735.6 170.1Q735.6 167.6 737.6 165.8Q739.6 163.9 742.1 163.9L771.3 163.9Q774.9 163.9 777.1 165.9Q779.2 167.9 779.7 169.9L803.5 250.8L829 170.1Q829.5 168.2 831.6 166Q833.8 163.9 837.7 163.9L856.4 163.9Q860.4 163.9 862.6 166Q864.9 168.2 865.2 170.1L890.6 250.8L914.4 169.9Q915 167.9 917.1 165.9Q919.2 163.9 922.9 163.9L952 163.9Q954.6 163.9 956.5 165.8Q958.5 167.6 958.5 170.1Q958.5 171.6 957.9 173L917.2 303.9Q916.4 306.8 914.2 308.9Q912.1 311 907.9 311L882.4 311Q878.5 311 876.2 308.9Q873.9 306.8 873.1 303.9L847.1 226.4L821 303.9Q820.2 306.8 817.9 308.9Q815.7 311 811.7 311M1619.7 311L1581.6 311Q1578.4 311 1576.5 308.9Q1574.5 306.8 1574.5 303.9L1574.5 120.1Q1574.5 117 1576.5 115Q1578.4 113 1581.6 113L1660.8 113Q1684.2 113 1701.6 120.2Q1719 127.4 1728.8 141.9Q1738.5 156.3 1738.5 178.3Q1738.5 200.1 1728.8 214.3Q1719 228.4 1701.6 235.2Q1684.2 242 1660.8 242L1627.1 242L1627.1 303.9Q1627.1 306.8 1625 308.9Q1622.9 311 1619.7 311M1626.2 152.3L1626.2 202.9L1659.3 202.9Q1671.5 202.9 1678.7 196.7Q1685.9 190.5 1685.9 177.8Q1685.9 167 1679.7 159.7Q1673.5 152.3 1659.3 152.3M1808.7 311L1775.3 311Q1772.2 311 1770.2 308.9Q1768.2 306.8 1768.2 303.9L1768.2 171Q1768.2 167.9 1770.2 165.9Q1772.2 163.9 1775.3 163.9L1808.7 163.9Q1811.8 163.9 1813.8 165.9Q1815.8 167.9 1815.8 171L1815.8 303.9Q1815.8 306.8 1813.8 308.9Q1811.8 311 1808.7 311M1809 142.7L1775 142.7Q1771.9 142.7 1769.9 140.7Q1768 138.7 1768 135.6L1768 110.2Q1768 107.3 1769.9 105.2Q1771.9 103.1 1775 103.1L1809 103.1Q1811.8 103.1 1813.9 105.2Q1816 107.3 1816 110.2L1816 135.6Q1816 138.7 1813.9 140.7Q1811.8 142.7 1809 142.7M1897.2 311L1861.9 311Q1858.8 311 1856.8 308.9Q1854.8 306.8 1854.8 303.9L1854.8 171Q1854.8 167.9 1856.8 165.9Q1858.8 163.9 1861.9 163.9L1894.4 163.9Q1897.5 163.9 1899.6 165.9Q1901.8 167.9 1901.8 171L1901.8 181.7Q1908.8 173 1920.7 167Q1932.6 161.1 1948.7 161.1Q1965.1 161.1 1977.7 168.4Q1990.3 175.8 1997.5 189.9Q2004.7 204.1 2004.7 225L2004.7 303.9Q2004.7 306.8 2002.7 308.9Q2000.8 311 1997.6 311L1962 311Q1959.2 311 1957 308.9Q1954.9 306.8 1954.9 303.9L1954.9 226.7Q1954.9 213.4 1948.6 206.2Q1942.2 199 1929.8 199Q1918.2 199 1911.2 206.2Q1904.3 213.4 1904.3 226.7L1904.3 303.9Q1904.3 306.8 1902.2 308.9Q1900.1 311 1897.2 311M2110.2 313.8Q2076.8 313.8 2057 295.7Q2037.2 277.6 2036.4 242Q2036.4 240 2036.4 236.9Q2036.4 233.8 2036.4 232.1Q2037.2 209.7 2046.4 193.8Q2055.6 177.8 2071.9 169.4Q2088.2 161.1 2109.9 161.1Q2134.8 161.1 2151.1 171Q2167.4 180.9 2175.6 197.9Q2183.8 214.8 2183.8 236.6L2183.8 243.4Q2183.8 246.5 2181.8 248.5Q2179.8 250.5 2176.7 250.5L2086.2 250.5Q2086.2 250.8 2086.2 251.3Q2086.2 251.9 2086.2 252.4Q2086.5 260.7 2089.1 267.4Q2091.8 274.2 2097.1 278.2Q2102.3 282.1 2109.9 282.1Q2115.6 282.1 2119.4 280.3Q2123.2 278.5 2125.8 276.1Q2128.3 273.7 2129.7 272Q2132.3 268.9 2133.8 268.1Q2135.4 267.4 2138.8 267.4L2173.9 267.4Q2176.7 267.4 2178.5 269.1Q2180.4 270.8 2180.1 273.7Q2179.8 278.5 2175.3 285.3Q2170.7 292 2162.1 298.7Q2153.5 305.3 2140.5 309.6Q2127.5 313.8 2110.2 313.8M2086.2 221.9L2086.2 222.5L2134 222.5L2134 221.9Q2134 212.6 2131.3 205.9Q2128.6 199.3 2123.1 195.6Q2117.6 191.9 2109.9 191.9Q2102.6 191.9 2097.2 195.6Q2091.8 199.3 2089 205.9Q2086.2 212.6 2086.2 221.9"/> </svg>
-    <h1>Thoughtful tools, built with care.</h1>
-    <p class="lede">A tiny human team and a fleet of AI agents. Two hosted products so far,
-    plus the developer tools we needed ourselves and released.</p>
-    <div class="actions">
-      <a class="btn primary" href="mailto:hello@yellowpine.com">Email us</a>
-      <a class="btn" href="https://github.com/yellow-pine">GitHub</a>
-    </div>
-  </header>
 
-  <section aria-labelledby="build">
-    <h2 id="build">What we build</h2>
-    <ul class="products">
-      <li>
-        <div class="top">
-          <span class="name"><a href="https://latch.fyi">Latch</a></span>
-          <span class="tag">grip-test your repo</span>
-        </div>
-        <p class="what">Scores a public GitHub repository two ways, for AI coding agents and
-        for human newcomers. Six category scores, a one-line verdict on each, and a
-        prioritized list of fixes with the score impact of each one.</p>
-      </li>
-      <li>
-        <div class="top">
-          <span class="name"><a href="https://kishi.fyi">kishi</a></span>
-          <span class="tag">show up as the most you</span>
-        </div>
-        <p class="what">Turns a short onboarding into a personalized, sixteen-section
-        dating-readiness kit, on the web and as a printable PDF. English, German and
-        Turkish.</p>
-      </li>
-      <li>
-        <div class="top">
-          <span class="name"><a href="https://github.com/yellow-pine/bly">bly</a></span>
-          <span class="tag">your career agent</span>
-        </div>
-        <p class="what">Runs a job search out of your own inbox, on your own machine. Free,
-        open source, local-first.</p>
-      </li>
-      <li>
-        <div class="top">
-          <span class="name"><a href="https://github.com/yellow-pine/zsh-github-dark">zsh-github-dark</a></span>
-          <span class="tag">a terminal that matches your editor</span>
-        </div>
-        <p class="what">A minimalist zsh and macOS Terminal setup with GitHub Dark colors, a
-        git-aware prompt, and a one-line installer.</p>
-      </li>
-    </ul>
+<header class="masthead">
+  <div class="inner">
+    <h1 class="lockup">Yellow <svg class="mark" xmlns="http://www.w3.org/2000/svg" viewBox="73.4 59.7 344.6 412.1" aria-hidden="true" focusable="false"><path fill="#FFD100" d="M249.4,78.9Q270.9,40.5 286.8,81.5L342.7,226.1Q350.7,246.6 328.7,245.1L185.1,235Q163.1,233.5 173.9,214.3Z"/><path fill="#FFD100" d="M236.9,175Q263.9,140.3 285.8,178.4L413.8,401.1Q424.7,420.2 402.8,418.6L293.1,411Q283.1,410.3 282.4,420.2L279.8,457.2Q278.8,472.1 263.8,471.1L217.9,467.9Q203,466.8 204,451.9L206.6,414.9Q207.3,405 197.3,404.3L87.6,396.6Q65.6,395.1 79.1,377.7Z"/></svg> Pine</h1>
+
+    <p class="tagline">Thoughtful tools, built with care.</p>
+    <p class="sub">A small product studio: a tiny human team and a fleet of AI agents.</p>
+
+    <div class="status">
+      <p class="chassis"><span class="prompt">&#10148;</span> <span class="path">~/code</span> <span class="cmd">gh pr merge</span> <span class="note"># every merge waits on a review from a model we serve ourselves</span></p>
+      <nav class="reach" aria-label="Reach us">
+        <a href="mailto:hello@yellowpine.com">hello@yellowpine.com</a>
+        <a href="https://github.com/yellow-pine">GitHub</a>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<main class="inner">
+  <section class="band" aria-labelledby="work">
+    <h2 id="work">What we build</h2>
+    <div>
+      <ul class="work">
+        <li>
+          <a class="row" href="https://latch.fyi">
+            <span class="head">
+              <span class="name">Latch</span>
+              <span class="where">latch.fyi</span>
+            </span>
+            <span class="what">Scores any public GitHub repository twice: once the way an AI
+            coding agent reads it, once the way a human newcomer does. Then it lists the
+            fixes worth making first.</span>
+          </a>
+        </li>
+        <li>
+          <a class="row" href="https://kishi.fyi">
+            <span class="head">
+              <span class="name">kishi</span>
+              <span class="where">kishi.fyi</span>
+            </span>
+            <span class="what">Turns a short onboarding into a personal dating-readiness kit
+            of sixteen sections, on the web and as a PDF you can print.</span>
+          </a>
+        </li>
+        <li>
+          <a class="row" href="https://github.com/yellow-pine/bly">
+            <span class="head">
+              <span class="name">bly</span>
+              <span class="where">Open source</span>
+            </span>
+            <span class="what">Runs a job search out of your own inbox, on your own machine.
+            Local-first, and free.</span>
+          </a>
+        </li>
+        <li>
+          <a class="row" href="https://github.com/yellow-pine/zsh-github-dark">
+            <span class="head">
+              <span class="name">zsh-github-dark</span>
+              <span class="where">Open source</span>
+            </span>
+            <span class="what">A zsh and macOS Terminal setup that matches GitHub Dark, with
+            a git-aware prompt and a one-line installer.</span>
+          </a>
+        </li>
+      </ul>
+    </div>
   </section>
 
-  <section aria-labelledby="how">
+  <section class="band" aria-labelledby="how">
     <h2 id="how">How we work</h2>
-    <p class="prose">We serve language models on our own hardware, gate every pull request on
-    a code review from a locally served model before it can merge, and build the tooling we
-    need as we go. The pieces that turn out to be useful to other people get released.</p>
-    <div class="chassis" role="img" aria-label="Terminal session showing a repository description and a push made by the studio's agents.">
-      <div><span class="prompt">&#10148;</span> <span class="path">~/code</span> gh repo view yellow-pine/.github</div>
-      <div class="note">The Yellow Pine homepage — org profile, public brand library, and org-wide config.</div>
-      <div><span class="prompt">&#10148;</span> <span class="path">~/code</span> git push <span class="note"># built with 💛 by a tiny human team and a fleet of agents</span></div>
+    <div>
+      <p class="prose">We serve our own language models on our own hardware. Every pull
+      request is reviewed by one of them before it can merge, and no change reaches a
+      product without passing that gate.</p>
+      <p class="prose">We build the tooling we need as we go. The pieces that turn out to be
+      useful to somebody else get released.</p>
     </div>
   </section>
 
-  <section aria-labelledby="contact">
-    <h2 id="contact">Get in touch</h2>
-    <p class="big">Write to us at <a href="mailto:hello@yellowpine.com">hello@yellowpine.com</a>,
-    or open an issue in the relevant repository.</p>
-    <nav class="links" aria-label="Elsewhere">
-      <a href="https://github.com/yellow-pine">GitHub</a>
-      <a href="https://latch.fyi">Latch</a>
-      <a href="https://kishi.fyi">kishi</a>
-    </nav>
+  <section class="band" aria-labelledby="say">
+    <h2 id="say">Get in touch</h2>
+    <div>
+      <p class="big">Write to <a href="mailto:hello@yellowpine.com">hello@yellowpine.com</a>,
+      or open an issue on <a href="https://github.com/yellow-pine">GitHub</a>.</p>
+    </div>
   </section>
-
-  <footer>
-    <span>Yellow Pine</span>
-    <span>Thoughtful tools, built with care.</span>
-  </footer>
 </main>
+
+<footer>
+  <div class="inner">
+    <span>Yellow Pine</span>
+    <span>Built in the open at <a href="https://github.com/yellow-pine">github.com/yellow-pine</a></span>
+  </div>
+</footer>
+
 </body>
 </html>
