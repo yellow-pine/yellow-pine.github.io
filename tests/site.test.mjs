@@ -1,16 +1,19 @@
-// Invariants for the Yellow Pine website (index.html), served at yellowpine.dev.
+// Invariants for the Yellow Pine website (index.html), served at yellowpine.com.
 //
 // The site is a single hand-written file with no build step, so there is no compiler to
 // catch mistakes. These tests are the gate instead:
 //
-//   1. CNAME says exactly yellowpine.dev, and the page's canonical URL agrees.
-//   2. Every github.com/yellow-pine/* link is reachable WITHOUT auth — the publish rule
+//   1. CNAME says exactly yellowpine.com, and the page's canonical URL agrees.
+//   2. The contact address is on that same domain. These are one fact in two places, and
+//      they did drift: the page advertised hello@yellowpine.com for two days while the
+//      site served yellowpine.dev and the .com MX belonged to the previous owner.
+//   3. Every github.com/yellow-pine/* link is reachable WITHOUT auth — the publish rule
 //      expressed without naming any repo: a link to a private repo 404s for the anonymous
 //      public and fails here, so nothing private can leak onto the site.
-//   3. Every product link is live (a dead product link is worse than no link).
-//   4. The page has no external asset dependencies beyond Google Fonts — the mark and
+//   4. Every product link is live (a dead product link is worse than no link).
+//   5. The page has no external asset dependencies beyond Google Fonts — the mark and
 //      favicon must stay inline, and the wordmark is live type rather than outlines.
-//   5. Brand v2.2 guardrails hold: the identity yellow appears only inside the inline mark
+//   6. Brand v2.2 guardrails hold: the identity yellow appears only inside the inline mark
 //      and the selection wash, and focus rings are azure, never yellow.
 //
 // Zero dependencies: node:test + global fetch (Node >= 20). Network checks honor
@@ -25,7 +28,7 @@ import { fileURLToPath } from 'node:url';
 const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const read = (p) => readFileSync(join(repoRoot, p), 'utf8');
 
-const DOMAIN = 'yellowpine.dev';
+const DOMAIN = 'yellowpine.com';
 const html = read('index.html');
 const skipNetwork = process.env.SKIP_NETWORK === '1';
 
@@ -81,6 +84,22 @@ test('page declares the canonical URL and matches CNAME', () => {
   const canonical = html.match(/<link rel="canonical" href="([^"]+)"/)?.[1];
   assert.ok(canonical, 'no canonical link');
   assert.equal(new URL(canonical).hostname, DOMAIN);
+});
+
+test('the contact address is on the domain the site serves', () => {
+  // A mailto on some other domain is a dead address the moment that domain stops being
+  // ours to route: the reader sees an invitation to write, and the mail lands nowhere.
+  // Contact domain and served domain are one fact, so they are asserted as one.
+  const mailtos = allHrefs.filter((h) => h.startsWith('mailto:'));
+  assert.ok(mailtos.length > 0, 'the page should offer a way to reach us');
+  for (const href of mailtos) {
+    const address = href.slice('mailto:'.length);
+    assert.equal(
+      address.split('@')[1],
+      DOMAIN,
+      `contact address is not on ${DOMAIN}: ${address}`,
+    );
+  }
 });
 
 test('page has the metadata a shared link needs', () => {

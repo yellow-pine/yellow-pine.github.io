@@ -1,13 +1,14 @@
-# yellow-pine.github.io — yellowpine.dev
+# yellow-pine.github.io — yellowpine.com
 
 The Yellow Pine website. One hand-written `index.html`, served by GitHub Pages at
-[yellowpine.dev](https://yellowpine.dev).
+[yellowpine.com](https://yellowpine.com).
 
 It is a **hook page**, not a brochure: who we are, what we have shipped, how to reach us.
 Detail lives on [github.com/yellow-pine](https://github.com/yellow-pine), the way
 [cansin.dev](https://cansin.dev) defers to its own profile.
 
-`yellowpine.com` is unrelated to this repo and still redirects to the GitHub org.
+`yellowpine.dev` is the redirect domain: it 301s here, apex and `www` alike. The apex moved
+from `.dev` to `.com` on 2026-09-10, once `yellowpine.com` was finally ours.
 
 ## Contents
 
@@ -59,6 +60,15 @@ SKIP_NETWORK=1 npm test   # offline: skip link-liveness
 
 ## Deploying
 
-Pages serves the default branch root. `CNAME` sets the domain. `.dev` is HSTS-preloaded, so
-the site is HTTPS-only by construction — there is no HTTP fallback to configure. After the
-DNS records point at GitHub, enable **Enforce HTTPS** once the certificate issues.
+Pages serves the default branch root. `CNAME` sets the domain.
+
+**Point DNS at GitHub _before_ the domain lands in `CNAME`.** If Pages registers a custom
+domain whose DNS still resolves elsewhere, certificate validation fails and GitHub never
+retries on its own: Pages keeps serving over HTTP, `https_certificate` is absent entirely,
+and the site is one `gh api -X PUT .../pages -f cname=""` and re-set away from working. Pass
+`https_enforced` in its own call afterwards — inline it 404s with "certificate does not exist
+yet".
+
+Unlike the old `.dev` apex, `.com` is not HSTS-preloaded, so HTTPS is not free here. **Enforce
+HTTPS** is what redirects HTTP to HTTPS, and it has to be switched on once the certificate
+issues rather than assumed.
