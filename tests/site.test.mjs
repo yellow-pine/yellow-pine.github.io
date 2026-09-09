@@ -103,6 +103,31 @@ test('the contact address is on the domain the site serves', () => {
   }
 });
 
+test('the social metadata points at the same domain', () => {
+  // hrefsIn() only sees href=/src=, so og:url never reaches the mailto and canonical
+  // checks above, and the metadata test below only asserts these tags EXIST, never what
+  // they say. Without this, a domain move can update CNAME and canonical, miss og:*, and
+  // still go green - while every shared link and social preview advertises the old domain.
+  const ogUrl = html.match(/<meta property="og:url" content="([^"]+)"/)?.[1];
+  assert.ok(ogUrl, 'no og:url');
+  assert.equal(new URL(ogUrl).hostname, DOMAIN);
+
+  const ogSite = html.match(/<meta property="og:site_name" content="([^"]+)"/)?.[1];
+  assert.ok(ogSite, 'no og:site_name');
+  assert.equal(ogSite, DOMAIN);
+});
+
+test('the contact address reads the same as it links', () => {
+  // The address is a link target AND visible text. Edit one without the other and the
+  // suite stays green while readers who copy it by eye, and crawlers reading the text,
+  // get the dead domain.
+  const links = [...html.matchAll(/<a href="mailto:([^"]+)"[^>]*>([^<]+)<\/a>/g)];
+  assert.ok(links.length > 0, 'expected at least one mailto link');
+  for (const [, target, text] of links) {
+    assert.equal(text.trim(), target.split('?')[0], 'anchor text must match the mailto target');
+  }
+});
+
 test('page has the metadata a shared link needs', () => {
   for (const needle of [
     '<!doctype html>',

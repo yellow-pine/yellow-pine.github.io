@@ -64,9 +64,18 @@ Pages serves the default branch root. `CNAME` sets the domain.
 
 **Point DNS at GitHub _before_ the domain lands in `CNAME`.** If Pages registers a custom
 domain whose DNS still resolves elsewhere, certificate validation fails and GitHub never
-retries on its own: Pages keeps serving over HTTP, `https_certificate` is absent entirely,
-and the site is one `gh api -X PUT .../pages -f cname=""` and re-set away from working. Pass
-`https_enforced` in its own call afterwards — inline it 404s with "certificate does not exist
+retries on its own: Pages keeps serving over HTTP and `https_certificate` is absent entirely.
+
+To recover, unset the custom domain and set it again, which re-runs validation:
+
+```sh
+gh api -X PUT repos/yellow-pine/yellow-pine.github.io/pages -F cname=null
+gh api -X PUT repos/yellow-pine/yellow-pine.github.io/pages -f cname=yellowpine.com
+```
+
+Note `-F`, not `-f`: the API removes the domain only on a JSON `null`, and `-f` would send
+the literal string `"null"`. Enable **Enforce HTTPS** in a separate call once the certificate
+issues — passing `https_enforced` alongside `cname` 404s with "certificate does not exist
 yet".
 
 Unlike the old `.dev` apex, `.com` is not HSTS-preloaded, so HTTPS is not free here. **Enforce
