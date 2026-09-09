@@ -93,7 +93,8 @@ test('the contact address is on the domain the site serves', () => {
   const mailtos = allHrefs.filter((h) => h.startsWith('mailto:'));
   assert.ok(mailtos.length > 0, 'the page should offer a way to reach us');
   for (const href of mailtos) {
-    const address = href.slice('mailto:'.length);
+    // Strip any ?subject=/?body= tail, or the domain check reads it as part of the host.
+    const address = href.slice('mailto:'.length).split('?')[0];
     assert.equal(
       address.split('@')[1],
       DOMAIN,
