@@ -37,7 +37,9 @@ live page before anything was changed.
 ## Non-goals
 
 - No redesign. Identity v2.2 and the page itself are untouched apart from three URLs.
-- No change to the free-trial hosted inbox pending setup on `.dev` (expires 2026-09-22).
+- The free-trial hosted inbox pending setup on `.dev` is neither set up nor cancelled; it
+  lapses on its own on 2026-09-22. Removing `.dev`'s MX and SPF does mean nothing reaches it
+  in the meantime, which is the point of making `.dev` redirect-only.
 - No new aliases. The 16 are copied across exactly.
 
 ## Order of operations
@@ -64,4 +66,11 @@ is confirmed serving: the outage lands on the domain being retired, never on the
 
 `yellowpine.com` serves 200 over valid HTTPS; `www.yellowpine.com` reaches it; `yellowpine.dev`
 and `www.yellowpine.dev` 301 to it over valid HTTPS; mail to an alias at `@yellowpine.com`
-arrives. The suite's own gate is `npm test` with the network checks enabled.
+arrives.
+
+**None of that is covered by `npm test`.** The suite asserts the repo's own invariants —
+`CNAME`, canonical, `og:*`, the contact address, the brand guardrails — and its only network
+checks are the `github.com/yellow-pine/*` links and the product links. The apex is explicitly
+excluded from the liveness test by `isSelf`, so a certificate that never issues, or a `.dev`
+forward that leaves the domain dark, would keep CI green indefinitely. The four checks above
+are manual, by `curl`, and are the real gate for this change.
